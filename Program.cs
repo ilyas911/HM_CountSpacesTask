@@ -1,10 +1,21 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 class Program
 {
-    static void Main()
+    static async Task Main()
     {
+        Console.WriteLine("Введите путь к папке с файлами, в которых нужно посчитать количество пробелов:");
+        string filePath = Console.ReadLine();
 
+        Stopwatch stopWatcher_SpacesCounter = new Stopwatch();
+        stopWatcher_SpacesCounter.Start();
+
+        int totalSpaces = await CountSpacesInFilesAsync(filePath);
+
+        stopWatcher_SpacesCounter.Stop();
+        Console.WriteLine("Общее количество пробелов со всех файлов - " + totalSpaces);
+        Console.WriteLine("Время на подсчет пробелов - " + stopWatcher_SpacesCounter.Elapsed.ToString());
     }
 
     static async Task<int> CountSpacesInFilesAsync(string folderPath)
@@ -15,7 +26,7 @@ class Program
         //creating and run tasks for every file
         Task<int>[] tasks = new Task<int>[files.Length];
         for (int i = 0; i < files.Length; i++)
-        {
+        { 
             tasks[i] = CountSpacesAsync(files[i]);
         }
         //waiting when all tasks will be finished and summarize counts of spaces
